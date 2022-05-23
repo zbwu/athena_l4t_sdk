@@ -1,0 +1,5 @@
+/dts-v1/;
+
+#include "tegra234-chip.dtsi"
+#include "tegra234-mb2-bct-scr-p3701-0000-override.dts"
+
