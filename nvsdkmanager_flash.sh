@@ -54,24 +54,6 @@ cleanup()
 	fi
 }
 
-create_cbo()
-{
-	file="$(mktemp)"
-
-	cat > "${file}"  <<EOF
-/dts-v1/;
-
-/ {
-		compatible = "nvidia,cboot-options-v1";
-		boot-configuration {
-		boot-order = ${1}, "sd", "emmc", "net";
-		};
-};
-EOF
-	dtc -I dts -O dtb -o "${curdir}"/bootloader/cbo.dtb "${file}"
-
-}
-
 function help_func
 {
 	echo "Usage: ./nvsdkmanager [OPTIONS]"
@@ -121,13 +103,7 @@ function flash_target_with_external_storage
 	# parse out target_board for initrd flash
 	target_board="$(echo "${OUTPUT}" | cut -d " " -f 1 | tail -1)"
 	echo "Target board is ${target_board}"
-	options=("--external-device" "${storage}" "-c" "${xml_config}" "--showlogs")
-	if [ "${storage}" = "sda1" ]; then
-		options+=("--network" "usb0")
-		create_cbo "\"usb\",\"nvme\""
-	else
-		create_cbo "\"nvme\",\"usb\""
-	fi
+	local options=("--external-device" "${storage}" "-c" "${xml_config}" "--showlogs" "--network" "usb0")
 	local username=""
 	for i in "${@}"
 	do
@@ -196,26 +172,27 @@ do
 		flash_target_with_external_storage "${@}"
 		exit $?;
 		;;
-	--nv-auto-config )
-		shift
-		if [ "$1" = "--username" ]; then
-			shift
-			username=$1
-			if [ "${username}" = "" ]; then
-				echo "*** ERROR Missing username of new account"
-				exit 5
-			fi
-			"${curdir}"/nv_tools/scripts/nv_preseed.sh -u "${username}"
-		fi
-		"${curdir}"/nvautoflash.sh -C "nv-auto-config"
-		exit $?
-		;;
 	--help )
 		help_func
 		exit 0
 	  ;;
 	* )
-		"${curdir}"/nvautoflash.sh "$@"
+		flash_options=
+		for i in "${@}"
+		do
+			if [ "${i}" == "--nv-auto-config" ]; then
+				flash_options+=("-C" "nv-auto-config")
+			elif [ "${i}" == "--username" ]; then
+				username=1
+			elif [ "${username}" = "1" ]; then
+				"${curdir}"/nv_tools/scripts/nv_preseed.sh -u "${i}"
+				username=""
+			else
+				flash_options+=("${i}")
+			fi
+		done
+
+		"${curdir}"/nvautoflash.sh "${flash_options[@]}"
 		exit $?
 	   ;;
 	esac

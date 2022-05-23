@@ -8,7 +8,6 @@ the host using recovery kernel initrd running on the target. This document
 describes in detail the procedure for "flashing using initrd".
 
 Requirements:
-- This tool requires the Secureboot package to be present.
 - This tool makes use of USB mass storage during flashing; therefore,
   automount of new external storage device needs to be disabled temporarily
   during flashing. On most distributions of Debian-based Linux, you can do this
@@ -23,7 +22,7 @@ How to use:
   bootloader/t186ref/cfg if the default "num_sectors" is incompatible. You must
   change "num_sectors" so that num_sectors * sector_size is equal to or smaller
   the size of the internal emmc/sd card of your Jetson.
-- This tool supports T194 and T186 devices. You can use the -h option to find out what options this tool supports.
+- This tool supports T194 and T234 devices. You can use the -h option to find out what options this tool supports.
 - Below are listed some sample workflows for initrd flashing.
 
 Workflow 1: How to flash single devices in one step
@@ -74,7 +73,7 @@ be "nvme".
 
 There are three examples xml files in the tools/kernel_flash folder. These
 examples assume that the attached external storage is 64 gibibytes and above:
-- flash_l4t_nvme.xml contains both the rootfs, kernel and kernel-dtb on the
+- flash_l4t_external.xml contains both the rootfs, kernel and kernel-dtb on the
   external storage device.
 - flash_l4t_nvme_rootfs_enc.xml is an example partition configuration used for
   disk encryption feature on external storage.
@@ -120,13 +119,13 @@ Where
 
 Example usage:
 Flash an NVMe SSD and use APP partition on it as root filesystem
-sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 -c ./tools/kernel_flash/flash_l4t_nvme.xml -S 8GiB  --showlogs  jetson-xavier nvme0n1p1
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 -c ./tools/kernel_flash/flash_l4t_external.xml  --showlogs  jetson-xavier nvme0n1p1
 
 Flash USB-connected storage use APP partition on it as root filesystem
-sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device sda1 -c ./tools/kernel_flash/flash_l4t_nvme.xml -S 8GiB  --showlogs  jetson-xavier mmcblk0p1
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device sda1 -c ./tools/kernel_flash/flash_l4t_external.xml --showlogs  jetson-xavier mmcblk0p1
 
 Flash an NVMe SSD and use the partition whose UUID is specified in l4t-rootfs-uuid.txt_ext as root filesystem
-sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 -c ./tools/kernel_flash/flash_l4t_nvme.xml -S 8GiB  --showlogs  jetson-xavier external
+sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 -c ./tools/kernel_flash/flash_l4t_external.xml --showlogs  jetson-xavier external
 
 
 
@@ -185,7 +184,7 @@ $ sudo ./tools/kernel_flash/l4t_initrd_flash.sh \
       -v sbk.key \
       --external-device nvme0n1 \
       -S 8GiB \
-      -c ./tools/kernel_flash/flash_l4t_nvme.xml \
+      -c ./tools/kernel_flash/flash_l4t_external.xml \
       jetson-xavier \
       external
 
@@ -292,7 +291,7 @@ $ sudo ./tools/kernel_flash/l4t_initrd_flash.sh -k eks jetson-xavier mmcblk0p1
 For flashing kernel-dtb partition on external device:
 $ sudo ./tools/kernel_flash/l4t_initrd_flash.sh \
   --external-device nvme0n1p1 \
-  -c ./tools/kernel_flash/flash_l4t_nvme.xml \
+  -c ./tools/kernel_flash/flash_l4t_external.xml \
   -k kernel-dtb --external-only jetson-xavier mmcblk0p1
 
 
@@ -369,7 +368,7 @@ Second step: Put the device into recovery mode, then generate a normal
 filesystem for the external device:
 $ sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash \
             --external-device nvme0n1p1 \
-            -S 8GiB -c ./tools/kernel_flash/flash_l4t_nvme.xml \
+            -c ./tools/kernel_flash/flash_l4t_external.xml \
             --external-only --append jetson-xavier-nx-devkit external
 
 Third step: Put the device into recovery mode, then flash both images:
@@ -389,7 +388,7 @@ flashing two devices simultaneously:
 
 $ sudo ./tools/kernel_flash/l4t_initrd_flash.sh --no-flash \
             --external-device nvme0n1p1 \
-            -S 8GiB -c ./tools/kernel_flash/flash_l4t_nvme.xml \
+            -S 8GiB -c ./tools/kernel_flash/flash_l4t_external.xml \
             --external-only --massflash 2 --append jetson-xavier external
 
 Third step: Put two devices into recovery mode, then flash two devices:
