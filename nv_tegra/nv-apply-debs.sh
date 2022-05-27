@@ -58,6 +58,14 @@ function AddDebsList {
 
 	for deb in "${L4T_ROOTFS_DEB_DIR}/${category}"/*.deb; do
 		deb_name=$(basename ${deb})
+		if [[ "${deb_name}" == *"-bootloader"* || "${deb_name}" == *"-kernel"* || "${deb_name}" == *"-initrd"* ]]; then
+			# The bootloader, kernel and initrd of athena build from source, not install official version
+			continue
+		fi
+		if [[ "${deb_name}" == *"-jetson-io"* || "${deb_name}" == *"-jetson-gpio"* ]]; then
+			# The jetson-io depends official kernel deb, ignored it
+			continue
+		fi
 		if [[ "${deb_name}" == "nvidia-l4t-core"* ]]; then
 			pre_deb_list+=("${L4T_TARGET_DEB_DIR}/${category}/${deb_name}")
 		else
