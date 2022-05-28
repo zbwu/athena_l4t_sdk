@@ -1,0 +1,27 @@
+[submodule "source/kernel/kernel-5.10"]
+	path = source/kernel/kernel-5.10
+	url = https://github.com/zbwu/athena_l4t_kernel.git
+[submodule "source/kernel/nvidia"]
+	path = source/kernel/nvidia
+	url = https://github.com/zbwu/athena_l4t_nvidia.git
+[submodule "source/kernel/nvgpu"]
+	path = source/kernel/nvgpu
+	url = https://nv-tegra.nvidia.com/r/linux-nvgpu
+[submodule "source/kernel/nvethernetrm"]
+	path = source/kernel/nvethernetrm
+	url = https://nv-tegra.nvidia.com/r/kernel/nvethernetrm
+[submodule "source/hardware/nvidia/platform/tegra/common"]
+	path = source/hardware/nvidia/platform/tegra/common
+	url = https://nv-tegra.nvidia.com/r/device/hardware/nvidia/platform/tegra/common
+[submodule "source/hardware/nvidia/soc/t19x"]
+	path = source/hardware/nvidia/soc/t19x
+	url = https://nv-tegra.nvidia.com/r/device/hardware/nvidia/soc/t19x
+[submodule "source/hardware/nvidia/platform/t19x/common"]
+	path = source/hardware/nvidia/platform/t19x/common
+	url = https://nv-tegra.nvidia.com/r/device/hardware/nvidia/platform/t19x/common
+[submodule "source/hardware/nvidia/platform/t19x/jakku/kernel-dts"]
+	path = source/hardware/nvidia/platform/t19x/jakku/kernel-dts
+	url = https://github.com/zbwu/athena_l4t_jakku_dts.git
+[submodule "source/hardware/nvidia/soc/tegra"]
+	path = source/hardware/nvidia/soc/tegra
+	url = https://nv-tegra.nvidia.com/r/device/hardware/nvidia/soc/tegra
