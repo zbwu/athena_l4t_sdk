@@ -348,10 +348,15 @@ generate_flash_initrd()
 	cp "${ROOTFS_DIR}/usr/lib/aarch64-linux-gnu/libzstd.so.1" "${working_dir}/initrd/usr/lib/aarch64-linux-gnu/libzstd.so.1"
 	KERNEL_VERSION="$(strings "${LINUX_BASE_DIR}/kernel/Image" | grep -oE "Linux version [0-9a-zA-Z\.\-]+[+]* " | cut -d\  -f 3)"
 	mkdir -p "${working_dir}/initrd/lib/modules/${KERNEL_VERSION}/kernel/drivers/"
-	cp -r "${ROOTFS_DIR}/lib/modules/${KERNEL_VERSION}/kernel/drivers/mtd"  "${working_dir}/initrd/lib/modules/${KERNEL_VERSION}/kernel/drivers/"
-	cp "${ROOTFS_DIR}/lib/modules/${KERNEL_VERSION}/modules"*  "${working_dir}/initrd/lib/modules/${KERNEL_VERSION}/"
-	cp -r "${ROOTFS_DIR}/lib/modules/${KERNEL_VERSION}/kernel/drivers/spi"  "${working_dir}/initrd/lib/modules/${KERNEL_VERSION}/kernel/drivers/"
-
+	if [ -e "${ROOTFS_DIR}/lib/modules/${KERNEL_VERSION}" ]; then
+		cp "${ROOTFS_DIR}/lib/modules/${KERNEL_VERSION}/modules"*  "${working_dir}/initrd/lib/modules/${KERNEL_VERSION}/"
+	fi
+	if [ -e "${ROOTFS_DIR}/lib/modules/${KERNEL_VERSION}/kernel/drivers/mtd" ]; then
+		cp -r "${ROOTFS_DIR}/lib/modules/${KERNEL_VERSION}/kernel/drivers/mtd"  "${working_dir}/initrd/lib/modules/${KERNEL_VERSION}/kernel/drivers/"
+	fi
+	if [ -e "${ROOTFS_DIR}/lib/modules/${KERNEL_VERSION}/kernel/drivers/spi" ]; then
+		cp -r "${ROOTFS_DIR}/lib/modules/${KERNEL_VERSION}/kernel/drivers/spi"  "${working_dir}/initrd/lib/modules/${KERNEL_VERSION}/kernel/drivers/"
+	fi
 
 	if [ -n "${network}" ]; then
 		local arr
