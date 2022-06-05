@@ -26,6 +26,7 @@ function athena_customize_rootfs {
 	ARM_ABI_DIR="${LDK_ROOTFS_DIR}/${ARM_ABI_DIR_ABS}"
 	ARM_ABI_TEGRA_DIR="${ARM_ABI_DIR}/tegra"
 
+	echo "Disabling USB otg RNDIS and UMS functions"
 	if [[ -f ${LDK_ROOTFS_DIR}/opt/nvidia/l4t-usb-device-mode/nv-l4t-usb-device-mode-config.sh ]]; then
 		sed -e "s:enable_rndis=1:enable_rndis=0:g" -e "s:enable_ums=1:enable_ums=0:g" \
 			-i ${LDK_ROOTFS_DIR}/opt/nvidia/l4t-usb-device-mode/nv-l4t-usb-device-mode-config.sh

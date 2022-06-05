@@ -1,13 +1,24 @@
 #!/bin/bash
 
-LDK_DIR=$PWD
+SCRIPT=$(realpath ${BASH_SOURCE[0]})
+LDK_DIR=$(dirname $SCRIPT)
 LDK_ROOTFS_DIR="${LDK_DIR}/rootfs"
 
 if [[ ! -f ${LDK_DIR}/tools/kernel_flash/l4t_initrd_flash.sh ]]; then
-    echo "${LDK_DIR} is not the TOP of L4T SDK"
-    exit
+    echo "ERROR: ${LDK_DIR} is not the TOP of L4T SDK"
+    exit 1
 fi
 
+if [[ ! -f ${LDK_DIR}/tools/samplefs/sample_fs.tbz2 ]]; then
+    echo "ERROR: ${LDK_DIR}/tools/samplefs/sample_fs.tbz2 not found"
+    exit 1
+fi
+
+THIS_USER="$(whoami)"
+if [ "${THIS_USER}" != "root" ]; then
+	echo "ERROR: This script requires root privilege" > /dev/stderr
+	exit 1
+fi
 # Clear old rootfs
 rm -rf ${LDK_ROOTFS_DIR}
 mkdir ${LDK_ROOTFS_DIR}

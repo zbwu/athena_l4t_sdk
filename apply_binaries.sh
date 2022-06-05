@@ -303,15 +303,11 @@ else
 		"${LDK_ROOTFS_DIR}" "${INSTALL_ROOT_OPTS}"
 fi
 
+# Copy rootfs ovelay
+cp -R ${LDK_DIR}/overlay/* ${LDK_ROOTFS_DIR}/
+
 # Customize rootfs
 "${LDK_DIR}/nv_tools/scripts/athena_customize_rootfs.sh" "${LDK_ROOTFS_DIR}"
-
-# Copy kernel and modules
-if [[ ! -f ${LDK_ROOTFS_DIR}/boot/Image ]]; then
-	cp ${LDK_DIR}/kernel/Image ${LDK_ROOTFS_DIR}/boot/
-	cp -R ${LDK_DIR}/kernel/overlay/lib/modules ${LDK_ROOTFS_DIR}/usr/lib/
-	cp -R ${LDK_DIR}/kernel/firmware/* ${LDK_ROOTFS_DIR}/usr/lib/firmware/
-fi
 
 # Setup default user, skip oem-config
 ${LDK_DIR}/tools/l4t_create_default_user.sh -u robot -p alpha -n cyberdog --accept-license

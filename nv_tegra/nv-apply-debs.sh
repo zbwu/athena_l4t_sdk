@@ -66,6 +66,10 @@ function AddDebsList {
 			# The jetson-io depends official kernel deb, ignored it
 			continue
 		fi
+		if [[ "${deb_name}" == *"-gui-tools"* || "${deb_name}" == *"-graphics-demos"* || "${deb_name}" == *"-configs"* ]]; then
+			# skip l4t-configs, l4t-graphics-demos, l4t-jetsonpower-gui-tools, l4t-nvpmodel-gui-tools and l4t-oem-config
+			continue
+		fi
 		if [[ "${deb_name}" == "nvidia-l4t-core"* ]]; then
 			pre_deb_list+=("${L4T_TARGET_DEB_DIR}/${category}/${deb_name}")
 		else
