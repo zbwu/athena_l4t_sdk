@@ -24,7 +24,7 @@ function build_kernel {
     make ARCH=arm64 O=$TEGRA_KERNEL_OUT -j$CORES
     
     # Do not install to $LINUX_FOR_TEGRA/rootfs, need root privileges
-    mkdir -p $LINUX_FOR_TEGRA/kernel/overlay
+    mkdir -p $LINUX_FOR_TEGRA/overlay
     make ARCH=arm64 O=$TEGRA_KERNEL_OUT modules_install INSTALL_MOD_PATH=$LINUX_FOR_TEGRA/overlay/
     
     DATE=$(date +"%Y%m%d_%H%M%S")
@@ -41,7 +41,7 @@ function build_kernel {
     
     ${CROSS_COMPILE}strip -g $(find $LINUX_FOR_TEGRA/overlay/ -name "*.ko")
     # remove build/source symlink
-    rm -rf $(find $LINUX_FOR_TEGRA/overlay/ -type l)
+    rm -rf $(find $LINUX_FOR_TEGRA/overlay/lib/modules -type l)
     # remove test ko
     rm -rf $LINUX_FOR_TEGRA/overlay/lib/modules/*/kernel/drivers/media/platform
     rm -rf $LINUX_FOR_TEGRA/overlay/lib/modules/*/kernel/drivers/platform
