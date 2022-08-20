@@ -1,0 +1,10 @@
+find . -name "*.tbz2" -type f -exec rm -rf {} \;
+find . -name "*-bootloader*.deb" -type f -exec rm -rf {} \;
+find . -name "*-kernel*.deb" -type f -exec rm -rf {} \;
+find . -name "*-initrd*.deb" -type f -exec rm -rf {} \;
+find . -name "*-gui-tools*.deb" -type f -exec rm -rf {} \;
+find . -name "*-graphics-demos*.deb" -type f -exec rm -rf {} \;
+find . -name "*-configs*.deb" -type f -exec rm -rf {} \;
+find . -name "*jetson-io*.deb" -type f -exec rm -rf {} \;
+find . -name "*jetson-gpio*.deb" -type f -exec rm -rf {} \;
+find . -name "Image*" -type f -exec rm -rf {} \;
